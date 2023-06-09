@@ -50,11 +50,11 @@ class Identificador(Base):
         
         if self.name in variaveis:
             if 'value' not in variaveis[self.name]:
-                print(f'Erro em tempo de execução: Variável \'{self.name}\' definida mas não inicializada')
+                print(f'Erro em tempo de execução: Variável \'{self.name}\' referenciada mas não inicializada.')
                 exit(1)
             return variaveis[self.name]['value']
         else:
-            print(f'Erro em tempo de execução: Variável \'{self.name}\' não definida')
+            print(f'Erro em tempo de execução: Variável \'{self.name}\' não definida.')
             exit(1)
 
 class Atribuicao(Base):

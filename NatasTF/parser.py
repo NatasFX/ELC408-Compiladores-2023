@@ -17,6 +17,7 @@ def p_sem_declaracao(p):
     '''
     declaracao : comandos
     '''
+
     p[0] = p[1].eval()
 
 
@@ -27,14 +28,64 @@ def p_declaracao(p):
 
     p[0] = p[2].eval()
 
+def p_lista_comandos(p):
+    '''
+    comandos : comando
+             | comandos comando
+    '''
+
+    if len(p) == 2:
+        p[0] = Comandos([p[1]])
+    else:
+        p[1].list.append(p[2])
+        p[0] = p[1]
+
+
+def p_comando(p):
+    '''
+    comando : atribuicao FIMCMD
+            | print FIMCMD
+            | exp FIMCMD
+            | leia FIMCMD
+            | if
+    '''
+
+    p[0] = p[1]
 
 def p_dec_variavel(p):
     '''
     dec_variavel : tipo lista_nomes fim
                  | dec_variavel dec_variavel
     '''
-    declaracoes.clear()
 
+    declaracoes.clear()
+    p[0] = p[1]
+
+
+# Usado para finalizar a criação das variáveis, pois elas precisam ser
+# primeiro instanciadas e depois populadas,
+# para evitar fazer gambiarras piores, fiz a menos pior
+def p_fim(p):
+    '''
+    fim : FIMCMD
+    '''
+
+    tipo = declaracoes[0]
+
+    for var in declaracoes[1:]:
+        variaveis[var] = {'type': tipo}
+
+    p[0] = p[1]
+
+
+def p_tipo(p):
+    '''
+    tipo : REAL
+         | INTEIRO
+         | CHAR
+    '''
+
+    declaracoes.append(p[1])
     p[0] = p[1]
 
 
@@ -43,6 +94,7 @@ def p_lista_nomes(p):
     lista_nomes : identificador
                 | lista_nomes VIRGULA lista_nomes
     '''
+
     p[0] = p[1]
 
 
@@ -62,56 +114,11 @@ def p_if_noelse(p):
     p[0] = Se(p[3], p[7])
 
 
-def p_tipo(p):
-    '''
-    tipo : REAL
-         | INTEIRO
-         | CHAR
-    '''
-    declaracoes.append(p[1])
-    p[0] = p[1]
-
-
-# Usado para finalizar a criação das variáveis, pois elas precisam ser
-# primeiro instanciadas e depois populadas,
-# para evitar fazer gambiarras piores, fiz a menos pior
-def p_fim(p):
-    '''
-    fim : FIMCMD
-    '''
-    tipo = declaracoes[0]
-    for var in declaracoes[1:]:
-        variaveis[var] = {'type': tipo}
-    p[0] = p[1]
-
-
-def p_lista_comandos(p):
-    '''
-    comandos : comando
-             | comandos comando
-    '''
-    if len(p) == 2:
-        p[0] = Comandos([p[1]])
-    else:
-        p[1].list.append(p[2])
-        p[0] = p[1]
-
-
-def p_comando(p):
-    '''
-    comando : atribuicao FIMCMD
-            | print FIMCMD
-            | exp FIMCMD
-            | leia FIMCMD
-            | if
-    '''
-    p[0] = p[1]
-
-
 def p_paren(p):
     '''
     exp : LPAREN exp RPAREN
     '''
+
     p[0] = p[2] if isinstance(p[2], Base) else Var(p[2])
 
 
@@ -120,6 +127,7 @@ def p_boolean_var(p):
     boolean : VERDADEIRO
             | FALSO
     '''
+
     p[0] = p[1]
 
 
@@ -134,7 +142,21 @@ def p_boolean(p):
             | comparable BITAND comparable
             | comparable BITOR comparable
     '''
+
     p[0] = BoolExp(p[1], p[2], p[3])
+
+
+def p_comparable(p):
+    '''
+    comparable : NUM
+               | boolean
+               | identificador
+    '''
+
+    if isinstance(p[1], Base):
+        p[0] = p[1]
+    else:
+        p[0] = Var(p[1])
 
 
 def p_operacao_binaria(p):
@@ -179,16 +201,14 @@ def p_operacao_unaria(p):
     else:
         p[0] = p[2]
 
-def p_comparable(p):
+
+def p_exp(p):
     '''
-    comparable : NUM
-               | boolean
-               | identificador
+    exp : var
+        | identificador
     '''
-    if isinstance(p[1], Base):
-        p[0] = p[1]
-    else:
-        p[0] = Var(p[1])
+
+    p[0] = p[1]
 
 def p_var(p):
     '''
@@ -196,6 +216,7 @@ def p_var(p):
         | CHAR
         | boolean
     '''
+
     if isinstance(p[1], Base):
         p[0] = p[1]
     else:
@@ -206,6 +227,7 @@ def p_atribuicao(p):
     '''
     atribuicao : identificador ATTRIB exp
     '''
+
     p[0] = Atribuicao(p[1], p[3])
 
 
@@ -213,22 +235,16 @@ def p_identificador(p):
     '''
     identificador : ID
     '''
+
     declaracoes.append(p[1])
     p[0] = Identificador(p[1])
-
-
-def p_exp(p):
-    '''
-    exp : var
-        | identificador
-    '''
-    p[0] = p[1]
 
 
 def p_print(p):
     '''
     print : ESCREVER LPAREN exp RPAREN
     '''
+
     p[0] = Print(p[3])
 
 
@@ -236,6 +252,7 @@ def p_ler(p):
     '''
     leia : LER LPAREN identificador RPAREN
     '''
+    
     p[0] = Ler(p[3])
 
 

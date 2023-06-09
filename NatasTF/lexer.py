@@ -16,8 +16,7 @@ reserved = {
     'ler': 'LER',
 
     # OUTROS
-    'enquanto': 'ENQUANTO',
-    'principal': 'PRINCIPAL'
+    'enquanto': 'ENQUANTO'
 }
 
 tokens = list(reserved.values()) + [

@@ -105,19 +105,16 @@ class BoolExp(Base):
 
 class Comandos:
     def __init__(self, list=None):
-        if list is None:
+        if not list:
             list = []
         self.list = list
-
-    def __len__(self):
-        return len(self.list)
 
     def eval(self):
         ret = []
         for n in self.list:
             res = n.eval()
 
-            if res:  ret.append(res)
+            if res: ret.append(res)
 
         return ret
     
@@ -130,7 +127,7 @@ class Se(Base):
     def eval(self):
         if self.exp.eval():
             return self.pv.eval()
-        elif self.pf is not None:
+        elif self.pf:
             return self.pf.eval()
         
 

@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from NatasTF.lexer import *
-from NatasTF.acaosemantica import *
+from NatasTF.acao_semantica import *
 
 precedence = (
     ('left', 'NOT'),

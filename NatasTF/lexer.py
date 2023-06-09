@@ -54,7 +54,7 @@ tokens = list(reserved.values()) + [
     'VIRGULA'
 ]
 
-t_CHAR = r"'.'"
+t_CHAR = r"'.*'"
 
 t_ignore_COMMENT = r'/\*(.|\n)*\*/'
 

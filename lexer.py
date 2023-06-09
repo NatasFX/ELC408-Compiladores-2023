@@ -5,7 +5,6 @@ reserved = {
     'char': 'CHAR',
     'real': 'REAL',
     'inteiro': 'INTEIRO',
-    'nulo': 'NULO',
     
     # CONDICIONAIS
     'se': 'SE',
@@ -41,14 +40,21 @@ tokens = list(reserved.values()) + [
     'MAIOREQ',
     'MENOR',
     'MENOREQ',
+    'NOT',
+    'BITAND',
+    'BITOR',
 
     'FIMCMD',
     
     'VERDADEIRO',
     'FALSO',
     'NUM',
-    'ID'
+    'ID',
+
+    'VIRGULA'
 ]
+
+t_CHAR = r"'.'"
 
 t_ignore_COMMENT = r'/\*(.|\n)*\*/'
 
@@ -68,16 +74,21 @@ t_MAIOR = r'>'
 t_MAIOREQ = r'>='
 t_MENOR = r'<'
 t_MENOREQ = r'<='
+t_NOT = r'!'
+t_BITAND = r'&&'
+t_BITOR = r'\|\|'
 
 t_FIMCMD = r';'
 
+t_VIRGULA = r','
+
 t_ignore_BRANCO = r'\s+'
+
 
 def t_VERDADEIRO(t):
     'VERDADEIRO'
     t.value = True
     return t
-
 
 def t_FALSO(t):
     'FALSO'
@@ -107,7 +118,7 @@ def t_error(t):
     nl = '\n'
     print(nl)
     print(t.value.split(nl)[0]) # linha que tem erro
-    print(f"^")
+    print('^')
     print(f"Erro léxico, token inválido: '{t.value[0]}' linha {t.lineno}")
     exit(1)
 
@@ -117,6 +128,11 @@ lexer = lex.lex()
 
 if __name__ == '__main__':
     data = '''\
+    a = 1;
+    real a;
+    a = 1.0;
+    escrever(a);
+    'a';
     escrever(3.0 + 4 * 10);
     /*a **** ///
 

@@ -122,18 +122,20 @@ def p_boolean_var(p):
     '''
     p[0] = p[1]
 
+
 def p_boolean(p):
     '''
-    boolean : exp EQUALS exp
-            | exp NEQUALS exp
-            | exp MAIOR exp
-            | exp MAIOREQ exp
-            | exp MENOR exp
-            | exp MENOREQ exp
-            | exp BITAND exp
-            | exp BITOR exp
+    boolean : comparable EQUALS comparable
+            | comparable NEQUALS comparable
+            | comparable MAIOR comparable
+            | comparable MAIOREQ comparable
+            | comparable MENOR comparable
+            | comparable MENOREQ comparable
+            | comparable BITAND comparable
+            | comparable BITOR comparable
     '''
     p[0] = BoolExp(p[1], p[2], p[3])
+
 
 def p_operacao_binaria(p):
     '''
@@ -162,6 +164,7 @@ def p_operacao_binaria(p):
     elif op == '*':
         p[0] = Var(left * right)
 
+
 def p_operacao_unaria(p):
     '''
     exp : SUB exp %prec USUB
@@ -176,6 +179,16 @@ def p_operacao_unaria(p):
     else:
         p[0] = p[2]
 
+def p_comparable(p):
+    '''
+    comparable : NUM
+               | boolean
+               | identificador
+    '''
+    if isinstance(p[1], Base):
+        p[0] = p[1]
+    else:
+        p[0] = Var(p[1])
 
 def p_var(p):
     '''

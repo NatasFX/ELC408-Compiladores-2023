@@ -1,0 +1,21 @@
+real x, media, qnt;
+inteiro cont;
+
+qnt = 5;
+
+cont = 1;
+media = 0;
+
+enquanto (cont < qnt) {
+    escrever('Valor');
+    escrever(cont);
+    ler(x);
+    media = media + x;
+    cont = cont + 1;
+}
+
+escrever('\n');
+escrever('Soma total:');
+escrever(media);
+escrever('Resultado da media:');
+escrever(media / qnt);

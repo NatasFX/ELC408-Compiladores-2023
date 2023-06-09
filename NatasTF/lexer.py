@@ -32,6 +32,8 @@ tokens = list(reserved.values()) + [
     'NEWLINE',
     'LPAREN',
     'RPAREN',
+    'LCHAVE',
+    'RCHAVE',
 
     'EQUALS',
     'NEQUALS',
@@ -66,6 +68,8 @@ t_DIV = r'/'
 
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_LCHAVE = r'\{'
+t_RCHAVE = r'\}'
 
 t_EQUALS = r'=='
 t_NEQUALS = r'!='

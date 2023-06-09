@@ -12,12 +12,21 @@ precedence = (
 
 declaracoes = []
 
+
+def p_sem_declaracao(p):
+    '''
+    declaracao : comandos
+    '''
+    p[0] = p[1].eval()
+
+
 def p_declaracao(p):
     '''
-    declaracao : dec_variavel comando
-               | comando
+    declaracao : dec_variavel comandos
     '''
-    p[0] = p[1]
+
+    p[0] = p[2].eval()
+
 
 def p_dec_variavel(p):
     '''
@@ -28,12 +37,30 @@ def p_dec_variavel(p):
 
     p[0] = p[1]
 
+
 def p_lista_nomes(p):
     '''
     lista_nomes : identificador
                 | lista_nomes VIRGULA lista_nomes
     '''
     p[0] = p[1]
+
+
+def p_if(p):
+    '''
+    if : SE LPAREN exp RPAREN ENTAO LCHAVE comandos RCHAVE SENAO LCHAVE comandos RCHAVE
+    '''
+
+    p[0] = Se(p[3], p[7], p[11])
+    
+
+def p_if_noelse(p):
+    '''
+    if : SE LPAREN exp RPAREN ENTAO LCHAVE comandos RCHAVE
+    '''
+
+    p[0] = Se(p[3], p[7])
+
 
 def p_tipo(p):
     '''
@@ -43,6 +70,7 @@ def p_tipo(p):
     '''
     declaracoes.append(p[1])
     p[0] = p[1]
+
 
 # Usado para finalizar a criação das variáveis, pois elas precisam ser
 # primeiro instanciadas e depois populadas,
@@ -56,21 +84,36 @@ def p_fim(p):
         variaveis[var] = {'type': tipo}
     p[0] = p[1]
 
+
+def p_lista_comandos(p):
+    '''
+    comandos : comando
+             | comandos comando
+    '''
+    if len(p) == 2:
+        p[0] = Comandos([p[1]])
+    else:
+        p[1].list.append(p[2])
+        p[0] = p[1]
+
+
 def p_comando(p):
     '''
     comando : atribuicao FIMCMD
             | print FIMCMD
             | exp FIMCMD
             | leia FIMCMD
-            | comando comando
+            | if
     '''
     p[0] = p[1]
+
 
 def p_paren(p):
     '''
     exp : LPAREN exp RPAREN
     '''
     p[0] = p[2] if isinstance(p[2], Base) else Var(p[2])
+
 
 def p_boolean_var(p):
     '''
@@ -146,12 +189,12 @@ def p_var(p):
         p[0] = Var(p[1])
 
 
-
 def p_atribuicao(p):
     '''
     atribuicao : identificador ATTRIB exp
     '''
-    p[0] = Atribuicao(p[1], p[3]).eval()
+    p[0] = Atribuicao(p[1], p[3])
+
 
 def p_identificador(p):
     '''
@@ -160,6 +203,7 @@ def p_identificador(p):
     declaracoes.append(p[1])
     p[0] = Identificador(p[1])
 
+
 def p_exp(p):
     '''
     exp : var
@@ -167,17 +211,19 @@ def p_exp(p):
     '''
     p[0] = p[1]
 
+
 def p_print(p):
     '''
     print : ESCREVER LPAREN exp RPAREN
     '''
-    print(p[3].eval()) # escreve na tela e não faz mais nada
+    p[0] = Print(p[3])
+
 
 def p_ler(p):
     '''
     leia : LER LPAREN identificador RPAREN
     '''
-    p[3].assign(input(f"Variável '{p[3].name}' recebe: "))
+    p[0] = Ler(p[3])
 
 
 def p_error(p):

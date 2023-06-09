@@ -101,3 +101,49 @@ class BoolExp(Base):
         except Exception as e:
             print(f'Erro em tempo de execução ao fazer operação binária: {e}. ({self.left} {op} {self.right})')
             exit(1)
+
+
+class Comandos:
+    def __init__(self, list=None):
+        if list is None:
+            list = []
+        self.list = list
+
+    def __len__(self):
+        return len(self.list)
+
+    def eval(self):
+        ret = []
+        for n in self.list:
+            res = n.eval()
+
+            if res:  ret.append(res)
+
+        return ret
+    
+class Se(Base):
+    def __init__(self, exp: Base, pv: Comandos, pf=None):
+        self.exp = exp
+        self.pv = pv
+        self.pf = pf
+
+    def eval(self):
+        if self.exp.eval():
+            return self.pv.eval()
+        elif self.pf is not None:
+            return self.pf.eval()
+        
+
+class Print(Base):
+    def __init__(self, arg: Base):
+        self.arg = arg
+    
+    def eval(self):
+        print(self.arg.eval())
+
+class Ler(Base):
+    def __init__(self, arg: Base):
+        self.arg = arg
+    
+    def eval(self):
+        self.arg.assign(input(f"Variável '{self.arg.name}' recebe: "))

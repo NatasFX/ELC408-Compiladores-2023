@@ -47,10 +47,20 @@ def p_comando(p):
             | print FIMCMD
             | exp FIMCMD
             | leia FIMCMD
+            | enquanto
             | if
     '''
 
     p[0] = p[1]
+
+
+def p_enquanto(p):
+    '''
+    enquanto : ENQUANTO LPAREN exp RPAREN LCHAVE comandos RCHAVE
+    '''
+
+    p[0] = Enquanto(p[3], p[6])
+
 
 def p_dec_variavel(p):
     '''
@@ -167,24 +177,7 @@ def p_operacao_binaria(p):
         | exp DIV exp  %prec DIV
     '''
 
-    op = p[2]
-
-    left = p[1].eval()
-    right = p[3].eval()
-
-    tleft, tright = type(left), type(right)
-
-    if tleft != tright:
-        raise BaseException(f"Soma de tipos ({tleft.__name__}, {tright.__name__}) não suportado.")
-
-    if op == '+':
-        p[0] = Var(left + right)
-    elif op == '-':
-        p[0] = Var(left - right)
-    elif op == '/':
-        p[0] = Var(left / right)
-    elif op == '*':
-        p[0] = Var(left * right)
+    p[0] = OpBinaria(p[1], p[2], p[3])
 
 
 def p_operacao_unaria(p):

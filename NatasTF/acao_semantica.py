@@ -147,3 +147,36 @@ class Ler(Base):
     
     def eval(self):
         self.arg.assign(input(f"Variável '{self.arg.name}' recebe: "))
+
+class Enquanto(Base):
+    def __init__(self, exp: Base, comandos: Comandos):
+        self.exp = exp
+        self.comandos = comandos
+
+    def eval(self):
+        while self.exp.eval():
+            self.comandos.eval()
+        
+
+class OpBinaria(Base):
+    def __init__(self, left: Base, op: str, right: Base):
+        self.left = left
+        self.op = op
+        self.right = right
+
+    def eval(self):
+        left, right = self.left.eval(), self.right.eval()
+
+        tleft, tright = type(left), type(right)
+
+        if tleft != tright and str in [tleft, tright]:
+            raise BaseException(f"Soma de tipos ({tleft.__name__}, {tright.__name__}) não suportado.")
+
+        if self.op == '+':
+            return left + right
+        elif self.op == '-':
+            return left - right
+        elif self.op == '/':
+            return left / right
+        elif self.op == '*':
+            return left * right

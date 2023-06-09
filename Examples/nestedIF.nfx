@@ -1,0 +1,15 @@
+real a,b;
+ler(b);
+a = 0;
+
+se (b > a) entao {
+    escrever('Seu número é maior que "a"');
+    se (2 > 1) entao {
+        escrever('2 é maior que 1');
+    } senao {
+        escrever('2 não é maior que um: ');
+    }
+}
+
+escrever('a terminou com: ');
+escrever(a);

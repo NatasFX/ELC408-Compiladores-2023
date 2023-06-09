@@ -136,7 +136,8 @@ class Print(Base):
         self.arg = arg
     
     def eval(self):
-        print(self.arg.eval())
+        s = self.arg.eval()
+        print(s if type(s) != str else s.replace('\\n', '\n').replace('\\t', '\t'))
 
 class Ler(Base):
     def __init__(self, arg: Base):

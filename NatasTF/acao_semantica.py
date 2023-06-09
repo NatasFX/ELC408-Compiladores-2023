@@ -65,12 +65,12 @@ class Atribuicao(Base):
     def eval(self):
         self.ID.assign(self.value.eval())
 
-class Var(Base): # REAL | CHAR
+class Var(Base):
     def __init__(self, value):
         self.value = value
 
-    def eval(self):
-        return self.value
+    def eval(self): # limpar char
+        return self.value.strip('\'') if type(self.value) == str else self.value
 
 class BoolExp(Base):
     ops = {

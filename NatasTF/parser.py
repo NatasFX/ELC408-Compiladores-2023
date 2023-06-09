@@ -252,7 +252,7 @@ def p_ler(p):
     '''
     leia : LER LPAREN identificador RPAREN
     '''
-    
+
     p[0] = Ler(p[3])
 
 
@@ -267,17 +267,3 @@ def p_error(p):
 
 def get_parser():
     return yacc.yacc()
-
-
-if __name__ == '__main__':
-
-    data = '''\
-    char a,b,c;
-    real x,y,z;
-    inteiro k;
-    ler(a);
-    k = a;
-    escrever(a != a);
-    '''
-
-    print(get_parser().parse(data))

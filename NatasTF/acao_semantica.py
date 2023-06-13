@@ -168,7 +168,8 @@ class OpBinaria(Base):
         tleft, tright = type(left), type(right)
 
         if tleft != tright and str in [tleft, tright]:
-            raise BaseException(f"Soma de tipos ({tleft.__name__}, {tright.__name__}) não suportado.")
+            print(f"Soma de tipos ({tleft.__name__}, {tright.__name__}) não suportado.")
+            exit(1)
 
         if self.op == '+':
             return left + right

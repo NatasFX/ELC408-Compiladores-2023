@@ -7,7 +7,7 @@ precedence = (
     ('left', 'SUM', 'SUB'),
     ('left', 'MUL', 'DIV'),
     ('right', 'USUB'),
-    ('right', 'USUM'),
+    ('right', 'USUM')
 )
 
 declaracoes = []

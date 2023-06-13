@@ -2,7 +2,14 @@
 Trabalho Final da Disciplina de Compiladores ELC408 UFSM Professor Giovani Librelotto
 
 O objetivo do trabalho foi a construção de uma linguagem de programação definida pelo professor o qual deveria ser feito um interpretador baseado nas técnicas vistas em aula.
-## Gramática
+
+
+# Execução
+Está presente dentro da pasta Examples alguns exemplos de código, rode-os com `python run.py Examples/nome_arquivo.nfx`.
+
+Eles podem ser alterados a gosto, desde que atendendam a gramática abaixo.
+
+# Gramática
 
 A gramática desta linguagem está abaixo, ela é uma GLC. Está descrita como <Símbolo não terminal> e os símbolos terminais estão representados por si próprios.
 
@@ -143,5 +150,6 @@ Um processo que não foi falado foi a criação de variáveis na tabela presente
 neste arquivo, o qual foi feito de uma forma diferente, pois como não se pode
 declarar variáveis depois de um comando, assim que finalizado a derivação da
 árvore em uma declaração de variável, já se popula a tabela com seu ID e 
-respectivo tipo.
+respectivo tipo. Mantive desta forma por motivos didáticos, pois tem-se mais
+de uma forma de realizar a mesma coisa.
 ```

@@ -109,7 +109,7 @@ símbolos corretamente tratados junto da execução do código.
 ## acao_semantica.py
 ```md
 Dentro deste arquivo eu defino diversas classes que são chamadas dentro do
-parser.py para que a arvore sintática esteja populada com classes.
+parser.py para que a arvore sintática esteja populada com objetos.
 Toda classe tem o método eval() que sintetizará um valor para atribuir à
 classe pai.
 

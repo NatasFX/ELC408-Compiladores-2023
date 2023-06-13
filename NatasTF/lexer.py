@@ -89,12 +89,12 @@ t_ignore_BRANCO = r'\s+'
 
 
 def t_VERDADEIRO(t):
-    'VERDADEIRO'
+    'verdadeiro'
     t.value = True
     return t
 
 def t_FALSO(t):
-    'FALSO'
+    'falso'
     t.value = False
     return t
 
@@ -114,7 +114,7 @@ def t_NEWLINE(t):
     r'\n'
     t.lexer.lineno += 1
     t.lexer.linepos = 0
-    pass
+
 
 
 def t_error(t):

@@ -101,7 +101,7 @@ Esta parte é bem simples pois apenas definindo os tokens a biblioteca já faz t
 ```
 Neste arquivo está definido a estrutura, formalmente uma Gramática Livre de
 Contexto (GLC) que está apresentada acima. Esta parte e o arquivo
-acao_semantica.py estão ligados fortemente,pois ele constroi a árvore sintática
+acao_semantica.py estão ligados fortemente, pois ele constroi a árvore sintática
 com objetos das classes contidas em acao_semantica. Após criada a árvore é feita
 uma mágica compilística descrita abaixo etodas as classes são resolvidas em
 símbolos corretamente tratados junto da execução do código.

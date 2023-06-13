@@ -85,7 +85,7 @@ Símbolo inicial da gramática: \<declaracao>
 
 <print> := escrever ( <exp> )
 
-<ler> := ler( <identificador> )
+<ler> := ler ( <identificador> )
 ```
 
 Sobre a precedência de operadores, a biblioteca fornece utilitários o qual retiram a necessidade de impor na gramática explicitamente este quesito, são os %prec que estão presentes no final de alguma produção.

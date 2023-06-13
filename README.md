@@ -76,8 +76,8 @@ Símbolo inicial da gramática: \<declaracao>
              |  <exp>
 
 <var> := NUM
-      | CHAR
-      | <boolean>
+      |  CHAR
+      |  <boolean>
 
 <atribuicao> : <identificador> = <exp>
 

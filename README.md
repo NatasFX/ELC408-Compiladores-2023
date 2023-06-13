@@ -79,9 +79,9 @@ Símbolo inicial da gramática: \<declaracao>
       |  CHAR
       |  <boolean>
 
-<atribuicao> : <identificador> = <exp>
+<atribuicao> := <identificador> = <exp>
 
-<identificador> : ID_lexico
+<identificador> := ID_lexico
 
 <print> := escrever ( <exp> )
 

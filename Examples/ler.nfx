@@ -1,0 +1,2 @@
+ler(a);
+ler(1); /* precisa fornecer um identificador, gera erro */

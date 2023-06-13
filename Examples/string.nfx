@@ -1,0 +1,7 @@
+char a;
+a = 'uma string dentro de a';
+
+escrever(a);
+
+escrever('o código abaixo deve printar erro, pois é uma soma de char com inteiro.');
+escrever(a+1);

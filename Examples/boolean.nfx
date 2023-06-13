@@ -1,0 +1,40 @@
+inteiro a;
+real b;
+
+a = verdadeiro;
+b = falso;
+
+se (a) entao {
+    escrever('variável a é verdadeira, seu valor:');
+    escrever(a);
+} senao {
+    escrever('variável a é falsa, seu valor:');
+    escrever(a);
+}
+
+se (b) entao {
+    escrever('variável b é verdadeira, seu valor:');
+    escrever(b);
+} senao {
+    escrever('variável b é falsa, seu valor:');
+    escrever(b);
+}
+
+se (a && b) entao {
+    escrever('a && b é verdadeira, seu valor:');
+    escrever(a && b);
+} senao {
+    escrever('a && b é falsa, seu valor:');
+    escrever(a && b);
+}
+
+se (a || b) entao {
+    escrever('a || b é verdadeira, seu valor:');
+    escrever(a || b);
+} senao {
+    escrever('a || b é falsa, seu valor:');
+    escrever(a || b);
+}
+
+escrever('a + b:');
+escrever(a+b);

@@ -161,6 +161,7 @@ def p_comparable(p):
     comparable : NUM
                | boolean
                | identificador
+               | exp
     '''
 
     if isinstance(p[1], Base):

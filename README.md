@@ -5,7 +5,7 @@ O objetivo do trabalho foi a construção de uma linguagem de programação defi
 
 
 # Execução
-Está presente dentro da pasta Examples alguns exemplos de código, rode-os com `python run.py Examples/nome_arquivo.nfx`.
+Está presente dentro da pasta Examples alguns exemplos de código, após instalar as dependências no arquivo `requirements.txt`, rode-os com `python run.py Examples/nome_arquivo.nfx`.
 
 Eles podem ser alterados a gosto, desde que atendendam a gramática abaixo.
 

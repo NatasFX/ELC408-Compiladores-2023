@@ -179,3 +179,17 @@ class OpBinaria(Base):
             return left / right
         elif self.op == '*':
             return left * right
+
+class UnaryOp(Base):
+    _ops = {
+        '!': lambda x: not x.eval(),
+        '-': lambda x: -x.eval(),
+        '+': lambda x: x.eval()
+        }
+    
+    def __init__(self, arg: Base, op: str):
+        self.arg = arg
+        self.op = op
+    
+    def eval(self):
+        return self._ops[self.op](self.arg)

@@ -187,12 +187,7 @@ def p_operacao_unaria(p):
         | NOT exp
     '''
 
-    if p[1] == '-':
-        p[0] = Var(-p[2].eval())
-    elif p[1] == '!':
-        p[0] = Var(not p[2].eval())
-    else:
-        p[0] = p[2]
+    p[0] = UnaryOp(p[2], p[1])
 
 
 def p_exp(p):

@@ -16,7 +16,7 @@ A gramática desta linguagem está abaixo, ela é uma GLC. Está descrita como <
 Símbolo inicial da gramática: \<declaracao>
 ```
 <declaracao> := <comandos>
-             |  <comandos>
+             |  <dec_variavel> <comandos>
              |  <dec_variavel>
 
 <comandos> := <comando>

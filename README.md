@@ -17,6 +17,7 @@ Símbolo inicial da gramática: \<declaracao>
 ```
 <declaracao> := <dec_variavel> <comandos>
              |  <comandos>
+             |  /* vazio */
 
 <comandos> := <comando>
            |  <comandos> <comando>
@@ -35,7 +36,7 @@ Símbolo inicial da gramática: \<declaracao>
 <dec_variavel> := <tipo> <lista_nomes> <fim>
                |  <dec_variavel> <dec_variavel>
 
-<fim> : ;
+<fim> := ;
 
 <tipo> := real
        |  inteiro

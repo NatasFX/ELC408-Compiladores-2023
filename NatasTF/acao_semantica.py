@@ -1,5 +1,6 @@
 import operator
 from types import LambdaType
+from NatasTF.utils import print_error_line
 
 # Guardamos o contexto das variáveis aqui
 # Como essa linguagem não suporta funções

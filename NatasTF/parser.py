@@ -1,6 +1,15 @@
 import ply.yacc as yacc
 from NatasTF.lexer import *
 from NatasTF.acao_semantica import *
+from NatasTF.utils import print_error_line
+
+
+class Parser():
+    def __init__(self):
+        self.yacc = yacc.yacc()
+
+    def parse(self, arg):
+        self.yacc.parse(arg, tracking=True)
 
 # informação de precedência para o yacc utilizar na gramática
 precedence = (
@@ -252,24 +261,17 @@ def p_ler(p):
     leia : LER LPAREN identificador RPAREN
     '''
 
-    p[0] = Ler(p[3])
-
+    p[0] = Ler(p, 3)
 
 def p_error(p):
     if p is not None:
+        print_error_line(p.lexpos)
         print(f"Erro sintático linha {p.lineno}, token inválido '{p.value}' {p.lexpos}")
         exit(1)
 
     print("ERRO Fim inesperado do arquivo.")
     exit(1)
 
-
-class Parser():
-    def __init__(self):
-        self.yacc = yacc.yacc()
-
-    def parse(self, arg):
-        self.yacc.parse(arg)
         
 def get_parser():
     return Parser()

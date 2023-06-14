@@ -110,10 +110,10 @@ def t_ID(t):
 
     return t
 
-def t_NEWLINE(t):
-    r'\n'
-    t.lexer.lineno += 1
-    t.lexer.linepos = 0
+# def t_NEWLINE(t):
+#     r'\n'
+#     t.lexer.lineno += 1
+#     t.lexer.lexpos = 0
 
 
 

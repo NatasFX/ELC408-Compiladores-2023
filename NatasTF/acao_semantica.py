@@ -217,7 +217,7 @@ class OpBinaria(Base):
 
 class OpUnaria(Base):
     _ops = {
-        '!': lambda x: not x,
+        '!': lambda x: int(not x),
         '-': lambda x: -x,
         '+': lambda x: x
     }

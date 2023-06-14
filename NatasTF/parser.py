@@ -265,8 +265,9 @@ def p_ler(p):
 
 def p_error(p):
     if p is not None:
+        print('\033[91m', end='')
         print_error_line(p.lexpos)
-        print(f"Erro sintático: Token inválido '{p.value}'")
+        print(f"Erro sintático: Token inválido '{p.value}'\033[0m")
         exit(1)
 
     print("ERRO Fim inesperado do arquivo.")

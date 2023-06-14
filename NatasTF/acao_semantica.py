@@ -231,11 +231,12 @@ class OpUnaria(Base):
 
 # trata erro encontrado em alguma produção
 def error_handler(error, lexpos):
-    print('\nErro encontrado! Veja abaixo a linha e a mensagem de erro.\n')
+    print('\033[91mErro encontrado! Veja abaixo a linha e a mensagem de erro.\n')
+    
     if not lexpos:
         print('Linha desconhecida.')
     else:
         print_error_line(lexpos)
 
-    print(error)
+    print(error, '\033[0m')
     exit(1)

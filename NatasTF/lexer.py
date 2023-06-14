@@ -119,10 +119,10 @@ def t_ID(t):
 
 def t_error(t):
     nl = '\n'
-    print(nl)
+    print('\033[91m',nl)
     print(t.value.split(nl)[0]) # linha que tem erro
     print('^')
-    print(f"Erro léxico, token inválido: '{t.value[0]}' linha {t.lineno}")
+    print(f"Erro léxico, token inválido: '{t.value[0]}' linha {t.lineno}\033[0m")
     exit(1)
 
 

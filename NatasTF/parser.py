@@ -264,5 +264,12 @@ def p_error(p):
     exit(1)
 
 
+class Parser():
+    def __init__(self):
+        self.yacc = yacc.yacc()
+
+    def parse(self, arg):
+        self.yacc.parse(arg)
+        
 def get_parser():
-    return yacc.yacc()
+    return Parser()

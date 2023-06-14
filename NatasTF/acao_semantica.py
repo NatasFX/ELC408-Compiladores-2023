@@ -114,9 +114,9 @@ class BoolExp(Base):
             op = self.ops[self.op]
 
             if isinstance(op, LambdaType):
-                return op(self.left, self.right)
+                return int(op(self.left, self.right))
 
-            return op(self.left.eval(), self.right.eval())
+            return int(op(self.left.eval(), self.right.eval()))
         except Exception as e:
             raise Exception(f'Erro semântico ao fazer operação binária: {e}. ({self.left} {self.op} {self.right})')
 

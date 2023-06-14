@@ -168,7 +168,14 @@ class Ler(Base):
         self.arg = p[arg]
     
     def _eval(self):
-        self.arg.assign(input(f"Variável '{self.arg.name}' recebe: "))
+        val = input(f"Variável '{self.arg.name}' recebe: ")
+
+        try:
+            val = float(val) # em ler(), tente converter '1' para real
+        except:
+            pass
+
+        self.arg.assign(val)
 
 
 class Enquanto(Base):

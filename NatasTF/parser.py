@@ -6,10 +6,11 @@ from NatasTF.utils import print_error_line
 
 class Parser():
     def __init__(self):
-        self.yacc = yacc.yacc()
+        self.yacc = yacc.yacc(errorlog=yacc.NullLogger())
 
     def parse(self, arg):
         self.yacc.parse(arg, tracking=True)
+
 
 # informação de precedência para o yacc utilizar na gramática
 precedence = (

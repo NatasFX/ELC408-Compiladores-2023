@@ -3,7 +3,7 @@ inteiro cont;
 
 qnt = 5;
 
-cont = 1;
+cont = 0;
 media = 0;
 
 enquanto (cont < qnt) {

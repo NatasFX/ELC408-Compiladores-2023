@@ -141,21 +141,14 @@ class Comandos(Base):
 class Se(Base):
     def __init__(self, p, exp, pv, pf=None):
         self.error_info = err_info(p, exp)
-        self._error_info = err_info(p, pv)
-        if pf:
-            self.__error_info = err_info(p, pf)
-        
         self.exp = p[exp]
         self.pv = p[pv]
         self.pf = None if not pf else p[pf]
 
     def _eval(self):
-        global evaluating # manualmente atualiza a variavel nesse caso
         if self.exp.eval():
-            evaluating = self._error_info
             return self.pv.eval()
         elif self.pf:
-            evaluating = self.__error_info
             return self.pf.eval()
         
 

@@ -104,7 +104,7 @@ def t_NUM(t):
     return t
 
 def t_ID(t):
-    r'[\$_a-zA-Z]\w*'
+    r'[_a-zA-Z][0-9_a-zA-Z]*'
 
     t.type = reserved.get(t.value, t.type)
 

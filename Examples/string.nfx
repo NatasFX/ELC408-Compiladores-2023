@@ -3,5 +3,8 @@ a = 'uma string dentro de a';
 
 escrever(a);
 
+escrever('ab' < 'ac');
+escrever('ab' == 'ab');
+
 escrever('o código abaixo deve printar erro, pois é uma soma de char com inteiro.');
-escrever(a+1);
+escrever(a-'k');

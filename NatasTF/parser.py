@@ -78,7 +78,7 @@ def p_enquanto(p):
     enquanto : ENQUANTO LPAREN exp RPAREN LCHAVE comandos RCHAVE
     '''
 
-    p[0] = Enquanto(p[3], p[6])
+    p[0] = Enquanto(p, 3, 6)
 
 
 def p_dec_variavel(p):
@@ -132,7 +132,7 @@ def p_if(p):
     if : SE LPAREN exp RPAREN ENTAO LCHAVE comandos RCHAVE SENAO LCHAVE comandos RCHAVE
     '''
 
-    p[0] = Se(p[3], p[7], p[11])
+    p[0] = Se(p, 3, 7, 11)
     
 
 def p_if_noelse(p):
@@ -140,7 +140,7 @@ def p_if_noelse(p):
     if : SE LPAREN exp RPAREN ENTAO LCHAVE comandos RCHAVE
     '''
 
-    p[0] = Se(p[3], p[7])
+    p[0] = Se(p, 3, 7)
 
 
 def p_paren(p):
@@ -148,7 +148,7 @@ def p_paren(p):
     exp : LPAREN exp RPAREN
     '''
 
-    p[0] = p[2] if isinstance(p[2], Base) else Var(p[2])
+    p[0] = p[2] if isinstance(p[2], Base) else Var(p, 2)
 
 
 def p_boolean_var(p):
@@ -172,7 +172,7 @@ def p_boolean(p):
             | comparable BITOR comparable
     '''
 
-    p[0] = BoolExp(p[1], p[2], p[3])
+    p[0] = BoolExp(p, 1, 2, 3)
 
 
 def p_comparable(p):
@@ -186,7 +186,7 @@ def p_comparable(p):
     if isinstance(p[1], Base):
         p[0] = p[1]
     else:
-        p[0] = Var(p[1])
+        p[0] = Var(p, 1)
 
 
 def p_operacao_binaria(p):
@@ -197,7 +197,7 @@ def p_operacao_binaria(p):
         | exp DIV exp  %prec DIV
     '''
 
-    p[0] = OpBinaria(p[1], p[2], p[3])
+    p[0] = OpBinaria(p, 1, 2, 3)
 
 
 def p_operacao_unaria(p):
@@ -207,7 +207,7 @@ def p_operacao_unaria(p):
         | NOT exp
     '''
 
-    p[0] = UnaryOp(p[2], p[1])
+    p[0] = OpUnaria(p, 2, 1)
 
 
 def p_exp(p):
@@ -228,7 +228,7 @@ def p_var(p):
     if isinstance(p[1], Base):
         p[0] = p[1]
     else:
-        p[0] = Var(p[1])
+        p[0] = Var(p, 1)
 
 
 def p_atribuicao(p):
@@ -236,7 +236,7 @@ def p_atribuicao(p):
     atribuicao : identificador ATTRIB exp
     '''
 
-    p[0] = Atribuicao(p[1], p[3])
+    p[0] = Atribuicao(p, 1, 3)
 
 
 def p_identificador(p):
@@ -245,7 +245,7 @@ def p_identificador(p):
     '''
 
     declaracoes.append(p[1])
-    p[0] = Identificador(p[1])
+    p[0] = Identificador(p, 1)
 
 
 def p_print(p):
@@ -253,7 +253,7 @@ def p_print(p):
     print : ESCREVER LPAREN exp RPAREN
     '''
 
-    p[0] = Print(p[3])
+    p[0] = Print(p, 3)
 
 
 def p_ler(p):
@@ -266,7 +266,7 @@ def p_ler(p):
 def p_error(p):
     if p is not None:
         print_error_line(p.lexpos)
-        print(f"Erro sintático linha {p.lineno}, token inválido '{p.value}' {p.lexpos}")
+        print(f"Erro sintático: Token inválido '{p.value}'")
         exit(1)
 
     print("ERRO Fim inesperado do arquivo.")

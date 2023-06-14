@@ -9,69 +9,85 @@ variaveis = {
 
 }
 
+# Tabela para tradução dos tipos para os tipos da linguagem
+_tipos = {
+    str: 'char',
+    float: 'real',
+    int: 'inteiro'
+}
+
+# função que obtem a posicao absoluta do lexem no código
+err_info = lambda p, n: p.lexpos(n)
+
+
 # Classe base que usamos como "interface"
 class Base:
+    error_info = None
+
     def eval(self):
+        try:
+            return self._eval()
+        except Exception as e:
+            error_handler(str(e), self.error_info)
+
+    def _eval(self):
         raise NotImplementedError()
+
 
 class Identificador(Base):
 
-    _tipos = {str: 'char',
-             float: 'real',
-             int: 'inteiro'}
+    def __init__(self, p, name):
+        self.error_info = err_info(p, name)
+        self.name = p[name]
 
-    def __init__(self, name):
-        self.name = name
 
     def assign(self, val):
 
         if self.name not in variaveis:
-            print(f'Variável \'{self.name}\' referenciada mas não declarada.')
-            exit(1)
+            raise Exception(f'Erro semântico: Variável \'{self.name}\' referenciada mas não declarada.')
         
-        # se for string
-        if isinstance(val, str):
-            if variaveis[self.name]['type'] == 'char': # tipos iguais, show
+        if isinstance(val, str): # se forem tipos iguais
+            if variaveis[self.name]['type'] == 'char':
                 variaveis[self.name]['value'] = val
-                return
-            
-            try:
-                val = float(val)
-            except:
-                print(f'Erro de atribuição: Variável \'{self.name}\' do tipo \'{variaveis[self.name]["type"]}\' incompatível com tipo \'{self._tipos[type(val)]}\'')
-                exit(1)
+            else:
+                raise Exception(f'Erro semântico: Variável \'{self.name}\' do tipo \'{variaveis[self.name]["type"]}\' incompatível com tipo \'{_tipos[type(val)]}\'')
         
         if variaveis[self.name]['type'] == 'real':
             variaveis[self.name]['value'] = float(val) # atribui float na variavel real
-        else:
+        elif variaveis[self.name]['type'] == 'inteiro':
             variaveis[self.name]['value'] = int(val) # se não for real, é inteiro, então converte
+        else:
+            raise Exception(f'Erro semântico: Variável \'{self.name}\' do tipo \'{variaveis[self.name]["type"]}\' incompatível com tipo \'{_tipos[type(val)]}\'')
 
 
-    def eval(self):
+    def _eval(self):
         
         if self.name in variaveis:
             if 'value' not in variaveis[self.name]:
-                print(f'Erro em tempo de execução: Variável \'{self.name}\' referenciada mas não inicializada.')
-                exit(1)
+                raise Exception(f'Erro semântico: Variável \'{self.name}\' referenciada mas não inicializada.')
             return variaveis[self.name]['value']
         else:
-            print(f'Erro em tempo de execução: Variável \'{self.name}\' não definida.')
-            exit(1)
+            raise Exception(f'Erro semântico: Variável \'{self.name}\' não definida.')
 
+    
 class Atribuicao(Base):
-    def __init__(self, ID: Identificador, value):
-        self.ID = ID
-        self.value = value
+    def __init__(self, p, ID, value):
+        self.error_info = err_info(p, ID) # pegando o ID inves de value
+        self.ID = p[ID]
+        self.value = p[value]
 
-    def eval(self):
+    def _eval(self):
         self.ID.assign(self.value.eval())
 
-class Var(Base):
-    def __init__(self, value):
-        self.value = value
 
-    def eval(self): # limpar char
+class Var(Base):
+    def __init__(self, p, value):
+        self.error_info = err_info(p,value)
+        self.value = p[value]
+        
+    def _eval(self): # limpar char
         return self.value.strip('\'') if type(self.value) == str else self.value
+
 
 class BoolExp(Base):
     ops = {
@@ -86,12 +102,13 @@ class BoolExp(Base):
         '||': lambda a, b: a.eval() or b.eval()
     }
 
-    def __init__(self, left, op, right):
-        self.left = left
-        self.op = op
-        self.right = right
+    def __init__(self, p, left, op, right):
+        self.error_info = err_info(p, op)
+        self.left = p[left]
+        self.op = p[op]
+        self.right = p[right]
 
-    def eval(self):
+    def _eval(self):
         try:
             op = self.ops[self.op]
 
@@ -100,97 +117,131 @@ class BoolExp(Base):
 
             return op(self.left.eval(), self.right.eval())
         except Exception as e:
-            print(f'Erro em tempo de execução ao fazer operação binária: {e}. ({self.left} {op} {self.right})')
-            exit(1)
+            raise Exception(f'Erro semântico ao fazer operação binária: {e}. ({self.left} {self.op} {self.right})')
 
 
-class Comandos:
+
+class Comandos(Base):
     def __init__(self, list=None):
         if not list:
             list = []
         self.list = list
 
-    def eval(self):
-        ret = []
-        for n in self.list:
-            res = n.eval()
+    def _eval(self):
+        r = []
+        for cmd in self.list:
+            res = cmd.eval()
 
-            if res: ret.append(res)
+            if res: r.append(res)
 
-        return ret
+        return r
     
-class Se(Base):
-    def __init__(self, exp: Base, pv: Comandos, pf=None):
-        self.exp = exp
-        self.pv = pv
-        self.pf = pf
 
-    def eval(self):
+class Se(Base):
+    def __init__(self, p, exp, pv, pf=None):
+        self.error_info = err_info(p, exp)
+        self._error_info = err_info(p, pv)
+        if pf:
+            self.__error_info = err_info(p, pf)
+        
+        self.exp = p[exp]
+        self.pv = p[pv]
+        self.pf = None if not pf else p[pf]
+
+    def _eval(self):
+        global evaluating # manualmente atualiza a variavel nesse caso
         if self.exp.eval():
+            evaluating = self._error_info
             return self.pv.eval()
         elif self.pf:
+            evaluating = self.__error_info
             return self.pf.eval()
         
 
 class Print(Base):
-    def __init__(self, arg: Base):
-        self.arg = arg
+    def __init__(self, p, arg: Base):
+        self.error_info = err_info(p, arg)
+        self.arg = p[arg]
     
-    def eval(self):
+    def _eval(self):
         s = self.arg.eval()
         print(s if type(s) != str else s.replace('\\n', '\n').replace('\\t', '\t'))
 
+
 class Ler(Base):
-    def __init__(self, arg: Base):
-        self.arg = arg
+    def __init__(self, p, arg: Base):
+        self.error_info = err_info(p, arg)
+        self.arg = p[arg]
     
-    def eval(self):
+    def _eval(self):
         self.arg.assign(input(f"Variável '{self.arg.name}' recebe: "))
 
-class Enquanto(Base):
-    def __init__(self, exp: Base, comandos: Comandos):
-        self.exp = exp
-        self.comandos = comandos
 
-    def eval(self):
+class Enquanto(Base):
+    def __init__(self, p, exp, comandos):
+        self.error_info = err_info(p, exp)
+        self.exp = p[exp]
+        self.comandos =p[comandos]
+
+    def _eval(self):
         while self.exp.eval():
             self.comandos.eval()
-        
+
 
 class OpBinaria(Base):
-    def __init__(self, left: Base, op: str, right: Base):
-        self.left = left
-        self.op = op
-        self.right = right
+    def __init__(self, p, left, op, right):
+        self.error_info = err_info(p, op)
+        self.left = p[left]
+        self.op = p[op]
+        self.right = p[right]
 
-    def eval(self):
+    def _eval(self):
         left, right = self.left.eval(), self.right.eval()
 
-        tleft, tright = type(left), type(right)
+        try:
+            if self.op == '+':
+                return left + right
+            elif self.op == '-':
+                return left - right
+            elif self.op == '/':
+                return left / right
+            elif self.op == '*':
+                return left * right
 
-        if tleft != tright and str in [tleft, tright]:
-            print(f"Soma de tipos ({tleft.__name__}, {tright.__name__}) não suportado.")
-            exit(1)
+        except ZeroDivisionError:
+            raise Exception(f"Erro semântico: Divisão por zero.")
+        except:
+            raise Exception(f"Erro semântico: operação \'{self.op}\' com tipos ({_tipos[type(left)]}, {_tipos[type(right)]}) não suportado.")
 
-        if self.op == '+':
-            return left + right
-        elif self.op == '-':
-            return left - right
-        elif self.op == '/':
-            return left / right
-        elif self.op == '*':
-            return left * right
 
-class UnaryOp(Base):
+class OpUnaria(Base):
     _ops = {
-        '!': lambda x: not x.eval(),
-        '-': lambda x: -x.eval(),
-        '+': lambda x: x.eval()
-        }
+        '!': lambda x: not x,
+        '-': lambda x: -x,
+        '+': lambda x: x
+    }
     
-    def __init__(self, arg: Base, op: str):
-        self.arg = arg
-        self.op = op
+    def __init__(self, p, arg, op):
+        self.error_info = err_info(p, op)
+        self.arg = p[arg]
+        self.op = p[op]
     
-    def eval(self):
-        return self._ops[self.op](self.arg)
+    def _eval(self):
+        val = self.arg.eval()
+        try:
+            return self._ops[self.op](val)
+        except:
+            raise Exception(f"Erro semântico: operação \'{self.op}\' com tipo {_tipos[type(val)]} não suportado.")
+
+
+
+# trata erro encontrado em alguma produção
+def error_handler(error, lexpos):
+    print('\nErro encontrado! Veja abaixo a linha e a mensagem de erro.\n')
+    if not lexpos:
+        print('Linha desconhecida.')
+    else:
+        print_error_line(lexpos)
+
+    print(error)
+    exit(1)

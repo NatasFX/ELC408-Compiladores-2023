@@ -49,6 +49,7 @@ class Identificador(Base):
         if isinstance(val, str): # se forem tipos iguais
             if variaveis[self.name]['type'] == 'char':
                 variaveis[self.name]['value'] = val
+                return
             else:
                 raise Exception(f'Erro semântico: Variável \'{self.name}\' do tipo \'{variaveis[self.name]["type"]}\' incompatível com tipo \'{_tipos[type(val)]}\'')
         

@@ -48,6 +48,14 @@ def p_declaracao(p):
 
     p[0] = p[2].eval()
 
+def p_declaracao_sem_comando(p):
+    '''
+    declaracao : dec_variavel
+    '''
+
+    p[0] = p[1]
+
+
 def p_lista_comandos(p):
     '''
     comandos : comando

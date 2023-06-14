@@ -1,2 +1,6 @@
+char a;
+
+escrever('digite uma letra');
 ler(a);
-ler(1); /* precisa fornecer um identificador, gera erro */
+
+/*ler(1);  precisaria fornecer um identificador, gera erro */

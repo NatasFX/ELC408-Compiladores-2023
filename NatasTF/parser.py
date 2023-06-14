@@ -2,6 +2,7 @@ import ply.yacc as yacc
 from NatasTF.lexer import *
 from NatasTF.acao_semantica import *
 
+# informação de precedência para o yacc utilizar na gramática
 precedence = (
     ('left', 'NOT'),
     ('left', 'SUM', 'SUB'),
@@ -10,8 +11,17 @@ precedence = (
     ('right', 'USUM')
 )
 
+# pilha utilizada para salvar as variáveis que estão sendo instanciadas no momento
 declaracoes = []
 
+
+
+#########################################
+# DECLARAÇÕES DOS SÍMBOLOS DA GRAMÁTICA #
+#########################################
+
+# Cada função tem uma string que representa o que o símbolo a esquerda pode derivar
+# Palavras em maiúsculo indicam símbolos não terminais declarados na fase léxica
 
 def p_sem_declaracao(p):
     '''

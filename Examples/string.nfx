@@ -6,5 +6,5 @@ escrever(a);
 escrever('ab' < 'ac');
 escrever('ab' == 'ab');
 
-escrever('o código abaixo deve printar erro, pois é uma soma de char com inteiro.');
+escrever('o código abaixo deve printar erro, pois é uma operação inválida.');
 escrever(a-'k');

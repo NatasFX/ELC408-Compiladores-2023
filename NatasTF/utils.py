@@ -3,7 +3,7 @@ import sys
 
 
 def print_error_line(lexpos):
-    code = "".join(open(sys.argv[1], 'rb').read().decode('utf8'))
+    code = "".join(open(sys.argv[1]).read())
     line_code = code.split('\n')
     for idx, line in enumerate(line_code):
         if lexpos < len(line):
